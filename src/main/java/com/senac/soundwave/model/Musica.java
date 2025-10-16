@@ -1,14 +1,20 @@
 package com.senac.soundwave.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "Musica")
+@Data
+@Table(name = "musica")
 public class Musica {
-
     @Id
+    @Column(name = "idMusica")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMusica;
 
@@ -39,76 +45,9 @@ public class Musica {
     @Column(name = "duracao_segundos")
     private Integer duracaoSegundos;
 
-    // Getters e Setters
-    public Integer getIdMusica() {
-        return idMusica;
-    }
+    @ManyToMany(mappedBy = "musicas")
+    @JsonBackReference
+    private List<Playlist> playlists = new ArrayList<>();
 
-    public void setIdMusica(Integer idMusica) {
-        this.idMusica = idMusica;
-    }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Integer getIdAlbum() {
-        return idAlbum;
-    }
-
-    public void setIdAlbum(Integer idAlbum) {
-        this.idAlbum = idAlbum;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-
-    public byte[] getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(byte[] imagem) {
-        this.imagem = imagem;
-    }
-
-    public byte[] getArquivoMp3() {
-        return arquivoMp3;
-    }
-
-    public void setArquivoMp3(byte[] arquivoMp3) {
-        this.arquivoMp3 = arquivoMp3;
-    }
-
-    public LocalDate getDataLancamento() {
-        return dataLancamento;
-    }
-
-    public void setDataLancamento(LocalDate dataLancamento) {
-        this.dataLancamento = dataLancamento;
-    }
-
-    public Integer getFaixa() {
-        return faixa;
-    }
-
-    public void setFaixa(Integer faixa) {
-        this.faixa = faixa;
-    }
-
-    public Integer getDuracaoSegundos() {
-        return duracaoSegundos;
-    }
-
-    public void setDuracaoSegundos(Integer duracaoSegundos) {
-        this.duracaoSegundos = duracaoSegundos;
-    }
 }
