@@ -1,0 +1,53 @@
+package com.senac.soundwave.model;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Data
+@Table(name = "musica")
+public class Musica {
+    @Id
+    @Column(name = "idMusica")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idMusica;
+
+    @NotNull
+    @Column(name = "nome", nullable = false, length = 45)
+    private String nome;
+
+    @Column(name = "idAlbum")
+    private Integer idAlbum;
+
+    @Column(name = "genero", length = 255)
+    private String genero;
+
+    @Lob
+    @Column(name = "imagem")
+    private byte[] imagem;
+
+    @Lob
+    @Column(name = "arquivo_mp3")
+    private byte[] arquivoMp3;
+
+    @Column(name = "data_lancamento")
+    private LocalDate dataLancamento;
+
+    @Column(name = "faixa")
+    private Integer faixa;
+
+    @Column(name = "duracao_segundos")
+    private Integer duracaoSegundos;
+
+    @ManyToMany(mappedBy = "musicas")
+    @JsonBackReference
+    private List<Playlist> playlists = new ArrayList<>();
+
+
+}

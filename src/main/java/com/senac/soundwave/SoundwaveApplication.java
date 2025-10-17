@@ -3,11 +3,9 @@ package com.senac.soundwave;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.senac")
 public class SoundwaveApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(SoundwaveApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(SoundwaveApplication.class, args);
+    }
 }
