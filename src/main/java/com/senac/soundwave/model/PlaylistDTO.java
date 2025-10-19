@@ -8,6 +8,7 @@ import java.util.List;
 public class PlaylistDTO {
     private String nome;
     private List<Integer> idMusicas;
+    private Integer idUsuario;
 
     //depois adicionar os outros stributos IdUsuario e etc
 }

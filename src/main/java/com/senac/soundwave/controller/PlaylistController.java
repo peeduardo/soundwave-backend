@@ -24,7 +24,7 @@ public class PlaylistController {
 
     @GetMapping
     public List<Playlist> listar() {
-        return repository.findAll();
+        return service.findAll();
     }
 
     @PostMapping
