@@ -16,6 +16,10 @@ public class PlaylistService {
     @Autowired
     private MusicaRepository musica;
 
+    public List<Playlist> findAll(){
+        return repository.findAll();
+    }
+
     public Playlist buscarPorId(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Playlist não encontrada"));
@@ -25,6 +29,7 @@ public class PlaylistService {
     public Playlist criarPlaylist(PlaylistDTO dto) {
         Playlist playlist = new Playlist();
         playlist.setNome(dto.getNome());
+        playlist.setIdUsuario(dto.getIdUsuario());
         if (dto.getIdMusicas() != null && !dto.getIdMusicas().isEmpty()) {
             List<Musica> musicas = musica.findAllById(dto.getIdMusicas());
             playlist.setMusicas(musicas);

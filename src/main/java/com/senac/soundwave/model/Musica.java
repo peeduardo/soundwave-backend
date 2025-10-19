@@ -29,12 +29,12 @@ public class Musica {
     private String genero;
 
     @Lob
-    @Column(name = "imagem")
-    private byte[] imagem;
+    @Column(name = "caminho_imagem")
+    private String caminho_imagem;
 
     @Lob
-    @Column(name = "arquivo_mp3")
-    private byte[] arquivoMp3;
+    @Column(name = "caminho_arquivo")
+    private String caminho_arquivo;
 
     @Column(name = "data_lancamento")
     private LocalDate dataLancamento;
