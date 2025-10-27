@@ -22,7 +22,7 @@ public class MusicaService {
     }
 
     public Musica upload(MusicaDTO musicaDTO) throws IOException {
-        String baseDir = "/uploads";
+        String baseDir = "uploads";
         String dirMp3 = baseDir + "/mp3";
         String dirImg = baseDir + "/imagens";
         Files.createDirectories(Paths.get(dirMp3));
