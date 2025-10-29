@@ -1,9 +1,13 @@
-package com.senac.soundwave.model;
+package com.senac.soundwave.Service;
 
+import com.senac.soundwave.repository.AlbumRepository;
 import com.senac.soundwave.repository.MusicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.senac.soundwave.model.Album;
 import com.senac.soundwave.model.Musica;
+import com.senac.soundwave.model.MusicaDTO;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,6 +19,8 @@ import java.util.List;
 public class MusicaService {
     @Autowired
     private MusicaRepository repository;
+    @Autowired
+    private AlbumRepository albumRepository;
     Musica musica = new Musica();
 
     public List<Musica> findAll(){
@@ -22,7 +28,7 @@ public class MusicaService {
     }
 
     public Musica upload(MusicaDTO musicaDTO) throws IOException {
-        String baseDir = "/uploads";
+        String baseDir = "uploads";
         String dirMp3 = baseDir + "/mp3";
         String dirImg = baseDir + "/imagens";
         Files.createDirectories(Paths.get(dirMp3));
@@ -42,11 +48,12 @@ public class MusicaService {
             caminhoImagem = dirImg + "/" + musicaDTO.getNome() + ".jpg";
             Files.write(Paths.get(caminhoImagem), dadosImagem);
         }
-
+         Album album = albumRepository.findById(musicaDTO.getIdAlbum())
+                     .orElseThrow(() -> new RuntimeException("Álbum não encontrado"));
 
         musica.setNome(musicaDTO.getNome());
         musica.setGenero(musicaDTO.getGenero());
-        musica.setIdAlbum(musicaDTO.getIdAlbum());
+        musica.setAlbum(album);
         musica.setDataLancamento(musicaDTO.getDataLancamento());
         musica.setFaixa(musicaDTO.getFaixa());
         musica.setDuracaoSegundos(musicaDTO.getDuracaoSegundos());
@@ -54,5 +61,9 @@ public class MusicaService {
         musica.setCaminho_imagem(caminhoImagem);
 
         return repository.save(musica);
+    }
+
+      public List<Musica> buscarPorAlbum(Integer albumId) {
+        return repository.findByAlbumId(albumId);
     }
 }

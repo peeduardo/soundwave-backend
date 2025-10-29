@@ -1,9 +1,9 @@
 package com.senac.soundwave.controller;
 
+import com.senac.soundwave.Service.PlaylistService;
 import com.senac.soundwave.model.Musica;
 import com.senac.soundwave.model.Playlist;
 import com.senac.soundwave.model.PlaylistDTO;
-import com.senac.soundwave.model.PlaylistService;
 import com.senac.soundwave.repository.MusicaRepository;
 import com.senac.soundwave.repository.PlaylistRepository;
 import jakarta.validation.Valid;
