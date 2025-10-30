@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class PlaylistService {
     @Autowired
@@ -19,7 +18,7 @@ public class PlaylistService {
     @Autowired
     private MusicaRepository musica;
 
-    public List<Playlist> findAll(){
+    public List<Playlist> findAll() {
         return repository.findAll();
     }
 
@@ -40,8 +39,8 @@ public class PlaylistService {
         return repository.save(playlist);
     }
 
-    public Playlist adicionarMusica(List<Integer> idMusicas,Integer id){
-        Playlist playlist =  repository.findById(id)
+    public Playlist adicionarMusica(List<Integer> idMusicas, Integer id) {
+        Playlist playlist = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Playlist não encontrada"));
         List<Musica> musicas = musica.findAllById(idMusicas);
 
@@ -52,4 +51,13 @@ public class PlaylistService {
         }
         return repository.save(playlist);
     }
+
+    public void deletarPlaylist(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Playlist não encontrada com o id: " + id);
+        }else{
+            repository.deleteById(id);
+        }
+    }
+
 }

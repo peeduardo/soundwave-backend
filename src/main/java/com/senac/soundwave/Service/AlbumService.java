@@ -22,8 +22,8 @@ public class AlbumService {
     private AlbumRepository repository;
     Album album = new Album();
 
-    public List<Album> findAll(){
-       return repository.findAll();
+    public List<Album> findAll() {
+        return repository.findAll();
     }
 
     public Album upload(AlbumDTO albumDTO) throws IOException {
@@ -32,7 +32,7 @@ public class AlbumService {
         Files.createDirectories(Paths.get(dirImg));
         String caminhoImagem = null;
         if (albumDTO.getCapa() != null) {
-            byte[] dadosImagem =  Base64.getDecoder().decode(
+            byte[] dadosImagem = Base64.getDecoder().decode(
                     albumDTO.getCapa().replaceAll("^data:[^,]+,", ""));
             caminhoImagem = dirImg + "/" + albumDTO.getNome() + ".jpg";
             Files.write(Paths.get(caminhoImagem), dadosImagem);
@@ -41,5 +41,13 @@ public class AlbumService {
         album.setNome(albumDTO.getNome());
         album.setDataLancamento(albumDTO.getDataLancamento());
         return repository.save(album);
+    }
+
+    public void deletarAlbum(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Álbum não encontrada com o id: " + id);
+        }else{
+            repository.deleteById(id);
+        }
     }
 }

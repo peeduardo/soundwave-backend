@@ -34,8 +34,15 @@ public class PlaylistController {
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Playlist> atualizarPlaylist(@PathVariable Integer id,@RequestBody @Valid List<Integer> musicas ) {
+    public ResponseEntity<Playlist> atualizarPlaylist(@PathVariable Integer id,
+            @RequestBody @Valid List<Integer> musicas) {
         Playlist playlistCreated = service.adicionarMusica(musicas, id);
         return ResponseEntity.ok(playlistCreated);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deletarPlaylist(@PathVariable Integer id) {
+        service.deletarPlaylist(id);
+        return ResponseEntity.noContent().build();
     }
 }

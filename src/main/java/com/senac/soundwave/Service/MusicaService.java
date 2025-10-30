@@ -23,8 +23,8 @@ public class MusicaService {
     private AlbumRepository albumRepository;
     Musica musica = new Musica();
 
-    public List<Musica> findAll(){
-       return repository.findAll();
+    public List<Musica> findAll() {
+        return repository.findAll();
     }
 
     public Musica upload(MusicaDTO musicaDTO) throws IOException {
@@ -43,13 +43,13 @@ public class MusicaService {
 
         String caminhoImagem = null;
         if (musicaDTO.getImagem() != null) {
-            byte[] dadosImagem =  Base64.getDecoder().decode(
+            byte[] dadosImagem = Base64.getDecoder().decode(
                     musicaDTO.getImagem().replaceAll("^data:[^,]+,", ""));
             caminhoImagem = dirImg + "/" + musicaDTO.getNome() + ".jpg";
             Files.write(Paths.get(caminhoImagem), dadosImagem);
         }
-         Album album = albumRepository.findById(musicaDTO.getIdAlbum())
-                     .orElseThrow(() -> new RuntimeException("Álbum não encontrado"));
+        Album album = albumRepository.findById(musicaDTO.getIdAlbum())
+                .orElseThrow(() -> new RuntimeException("Álbum não encontrado"));
 
         musica.setNome(musicaDTO.getNome());
         musica.setGenero(musicaDTO.getGenero());
@@ -63,7 +63,15 @@ public class MusicaService {
         return repository.save(musica);
     }
 
-      public List<Musica> buscarPorAlbum(Integer albumId) {
+    public void deletarMusica(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Música não encontrada com o id: " + id);
+        }else{
+            repository.deleteById(id);
+        }
+    }
+
+    public List<Musica> buscarPorAlbum(Integer albumId) {
         return repository.findByAlbumId(albumId);
     }
 }

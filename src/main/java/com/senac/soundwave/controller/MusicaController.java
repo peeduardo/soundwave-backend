@@ -80,4 +80,10 @@ public class MusicaController {
                     .body(response);
         }
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deletarMusica(@PathVariable Integer id) {
+        service.deletarMusica(id);
+        return ResponseEntity.noContent().build();
+    }
 }
