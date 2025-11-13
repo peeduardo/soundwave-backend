@@ -1,9 +1,11 @@
 package com.senac.soundwave.controller;
 
+import com.senac.soundwave.Service.MusicaService;
 import com.senac.soundwave.model.Musica;
 import com.senac.soundwave.model.MusicaDTO;
-import com.senac.soundwave.model.MusicaService;
 import com.senac.soundwave.repository.MusicaRepository;
+
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -34,19 +36,36 @@ public class MusicaController {
         return service.findAll();
     }
 
-    @PostMapping(value="/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @GetMapping("/album/{id}")
+    public ResponseEntity<List<Musica>> getMusicasPorAlbum(@PathVariable Integer id) {
+        List<Musica> musicas = service.buscarPorAlbum(id);
+
+        if (musicas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(musicas);
+    }
+
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> adicionar(@RequestParam("nome") String nome,
-                                               @RequestParam("genero") String genero,
-                                               @RequestParam("arquivoMp3") MultipartFile arquivo,
-                                               @RequestParam(value = "imagem", required = false) MultipartFile imagem) {
+            @RequestParam("genero") String genero,
+            @RequestParam("arquivoMp3") MultipartFile arquivo,
+            @RequestParam("idAlbum") Integer idAlbum,
+            @RequestParam("dataLancamento") LocalDate dataLancamento,
+            @RequestParam("faixa") int faixa,
+            @RequestParam("duracaoSegundos") int duracao,
+            @RequestParam(value = "imagem") MultipartFile imagem) {
         try {
             MusicaDTO musica = new MusicaDTO();
             musica.setNome(nome);
             musica.setGenero(genero);
             musica.setArquivoMp3(Base64.getEncoder().encodeToString(arquivo.getBytes()));
-            if (imagem != null) {
-                musica.setImagem(Base64.getEncoder().encodeToString(imagem.getBytes()));
-            }
+            musica.setImagem(Base64.getEncoder().encodeToString(imagem.getBytes()));
+            musica.setDataLancamento(dataLancamento);
+            musica.setDuracaoSegundos(duracao);
+            musica.setIdAlbum(idAlbum);
+            musica.setFaixa(faixa);
             Musica musicaSalva = service.upload(musica);
             Map<String, Object> response = new HashMap<>();
             response.put("mensagem", "Música salva com sucesso!");
@@ -60,5 +79,11 @@ public class MusicaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(response);
         }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deletarMusica(@PathVariable Integer id) {
+        service.deletarMusica(id);
+        return ResponseEntity.noContent().build();
     }
 }
