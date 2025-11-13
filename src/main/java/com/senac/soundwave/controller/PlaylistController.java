@@ -1,9 +1,9 @@
 package com.senac.soundwave.controller;
 
+import com.senac.soundwave.Service.PlaylistService;
 import com.senac.soundwave.model.Musica;
 import com.senac.soundwave.model.Playlist;
 import com.senac.soundwave.model.PlaylistDTO;
-import com.senac.soundwave.model.PlaylistService;
 import com.senac.soundwave.repository.MusicaRepository;
 import com.senac.soundwave.repository.PlaylistRepository;
 import jakarta.validation.Valid;
@@ -34,8 +34,15 @@ public class PlaylistController {
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Playlist> atualizarPlaylist(@PathVariable Integer id,@RequestBody @Valid List<Integer> musicas ) {
+    public ResponseEntity<Playlist> atualizarPlaylist(@PathVariable Integer id,
+            @RequestBody @Valid List<Integer> musicas) {
         Playlist playlistCreated = service.adicionarMusica(musicas, id);
         return ResponseEntity.ok(playlistCreated);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deletarPlaylist(@PathVariable Integer id) {
+        service.deletarPlaylist(id);
+        return ResponseEntity.noContent().build();
     }
 }

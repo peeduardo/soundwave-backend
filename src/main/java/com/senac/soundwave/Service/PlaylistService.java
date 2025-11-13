@@ -1,5 +1,8 @@
-package com.senac.soundwave.model;
+package com.senac.soundwave.Service;
 
+import com.senac.soundwave.model.Musica;
+import com.senac.soundwave.model.Playlist;
+import com.senac.soundwave.model.PlaylistDTO;
 import com.senac.soundwave.repository.MusicaRepository;
 import com.senac.soundwave.repository.PlaylistRepository;
 import jakarta.transaction.Transactional;
@@ -7,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PlaylistService {
@@ -16,7 +18,7 @@ public class PlaylistService {
     @Autowired
     private MusicaRepository musica;
 
-    public List<Playlist> findAll(){
+    public List<Playlist> findAll() {
         return repository.findAll();
     }
 
@@ -37,8 +39,8 @@ public class PlaylistService {
         return repository.save(playlist);
     }
 
-    public Playlist adicionarMusica(List<Integer> idMusicas,Integer id){
-        Playlist playlist =  repository.findById(id)
+    public Playlist adicionarMusica(List<Integer> idMusicas, Integer id) {
+        Playlist playlist = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Playlist não encontrada"));
         List<Musica> musicas = musica.findAllById(idMusicas);
 
@@ -49,4 +51,13 @@ public class PlaylistService {
         }
         return repository.save(playlist);
     }
+
+    public void deletarPlaylist(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Playlist não encontrada com o id: " + id);
+        }else{
+            repository.deleteById(id);
+        }
+    }
+
 }
