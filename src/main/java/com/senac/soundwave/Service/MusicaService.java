@@ -53,6 +53,7 @@ public class MusicaService {
                 .orElseThrow(() -> new RuntimeException("Álbum não encontrado"));
 
         musicaUpload.setNome(musicaDTO.getNome());
+        musicaUpload.setArtista(musicaDTO.getArtista());
         musicaUpload.setGenero(musicaDTO.getGenero());
         musicaUpload.setAlbum(album);
         musicaUpload.setDataLancamento(musicaDTO.getDataLancamento());
