@@ -28,6 +28,7 @@ public class MusicaService {
     }
 
     public Musica upload(MusicaDTO musicaDTO) throws IOException {
+        Musica musicaUpload = new Musica();
         String baseDir = "uploads";
         String dirMp3 = baseDir + "/mp3";
         String dirImg = baseDir + "/imagens";
@@ -51,16 +52,16 @@ public class MusicaService {
         Album album = albumRepository.findById(musicaDTO.getIdAlbum())
                 .orElseThrow(() -> new RuntimeException("Álbum não encontrado"));
 
-        musica.setNome(musicaDTO.getNome());
-        musica.setGenero(musicaDTO.getGenero());
-        musica.setAlbum(album);
-        musica.setDataLancamento(musicaDTO.getDataLancamento());
-        musica.setFaixa(musicaDTO.getFaixa());
-        musica.setDuracaoSegundos(musicaDTO.getDuracaoSegundos());
-        musica.setCaminho_arquivo(caminhoMp3);
-        musica.setCaminho_imagem(caminhoImagem);
+        musicaUpload.setNome(musicaDTO.getNome());
+        musicaUpload.setGenero(musicaDTO.getGenero());
+        musicaUpload.setAlbum(album);
+        musicaUpload.setDataLancamento(musicaDTO.getDataLancamento());
+        musicaUpload.setFaixa(musicaDTO.getFaixa());
+        musicaUpload.setDuracaoSegundos(musicaDTO.getDuracaoSegundos());
+        musicaUpload.setCaminho_arquivo(caminhoMp3);
+        musicaUpload.setCaminho_imagem(caminhoImagem);
 
-        return repository.save(musica);
+        return repository.save(musicaUpload);
     }
 
     public void deletarMusica(Integer id) {
