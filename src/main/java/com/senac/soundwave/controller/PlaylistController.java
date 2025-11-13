@@ -13,6 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
+
+// --- IMPORTS NOVOS ADICIONADOS ---
+import org.springframework.web.bind.annotation.DeleteMapping;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/playlists")
@@ -25,6 +31,19 @@ public class PlaylistController {
     @GetMapping
     public List<Playlist> listar() {
         return service.findAll();
+    }
+
+    // ==========================================================
+    // --- NOVA FUNÇÃO ADICIONADA ---
+    /**
+     * Busca uma playlist específica pelo seu ID.
+     * @param id O ID da playlist (vem da URL, ex: /playlists/5)
+     * @return A playlist encontrada ou um erro 404 (via service)
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Playlist> buscarPlaylistPorId(@PathVariable Integer id) {
+        Playlist playlist = service.buscarPorId(id);
+        return ResponseEntity.ok(playlist);
     }
 
     @PostMapping
@@ -40,9 +59,25 @@ public class PlaylistController {
         return ResponseEntity.ok(playlistCreated);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deletarPlaylist(@PathVariable Integer id) {
-        service.deletarPlaylist(id);
-        return ResponseEntity.noContent().build();
+    // ==========================================================
+    // --- FUNÇÃO DE EDITAR NOME (ADICIONADA) ---
+    // ==========================================================
+    @PutMapping("/{id}/editarNome")
+    public ResponseEntity<Playlist> editarNomePlaylist(
+            @PathVariable Integer id,
+            @RequestBody Map<String, String> body) {
+
+        String novoNome = body.get("nome");
+        Playlist playlistAtualizada = service.editarNome(id, novoNome);
+        return ResponseEntity.ok(playlistAtualizada);
+    }
+
+    // ==========================================================
+    // --- FUNÇÃO DE EXCLUIR PLAYLIST (ADICIONADA) ---
+    // ==========================================================
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirPlaylist(@PathVariable Integer id) {
+        service.excluirPlaylist(id);
+        return ResponseEntity.noContent().build(); // Retorna 204 (Sucesso, sem conteúdo)
     }
 }
