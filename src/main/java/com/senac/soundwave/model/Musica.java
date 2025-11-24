@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +21,17 @@ public class Musica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMusica;
 
+    @Column(name = "artista", length = 100)
+    private String artista;
+
     @NotNull
     @Column(name = "nome", nullable = false, length = 45)
+    @NotNull(message = "Uma musica precisa de um nome")
     private String nome;
 
-    @Column(name = "idAlbum")
-    private Integer idAlbum;
+    // @Column(name = "idAlbum", nullable = false)
+    // @NotNull(message = "Uma musica precisa de um album")
+    // private Integer idAlbum;
 
     @Column(name = "genero", length = 255)
     private String genero;
@@ -49,5 +57,9 @@ public class Musica {
     @JsonBackReference
     private List<Playlist> playlists = new ArrayList<>();
 
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "idAlbum", nullable = false)
+    private Album album;
 
 }

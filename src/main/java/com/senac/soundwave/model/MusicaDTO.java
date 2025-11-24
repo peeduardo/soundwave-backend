@@ -11,9 +11,11 @@ public class MusicaDTO {
     private Integer idAlbum;
     private String genero;
     private String imagem;
+    private String artista; 
     private String arquivoMp3;
     private LocalDate dataLancamento;
     private Integer faixa;
     private Integer duracaoSegundos;
     private List<Integer> playlistsIds;
+    
 }
