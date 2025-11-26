@@ -119,4 +119,38 @@ public class MusicaController {
         service.deletarMusica(id);
         return ResponseEntity.noContent().build();
     }
+@Autowired
+private MusicaRepository musicaRepository;
+
+@GetMapping("/buscar")
+public ResponseEntity<?> buscarMusicas(@RequestParam String termo) {
+    try {
+        List<Musica> resultados = musicaRepository.buscarPorNome(termo);
+
+        // Caso encontre resultados
+        if (!resultados.isEmpty()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "ok");
+            response.put("resultados", resultados);
+            return ResponseEntity.ok(response);
+        }
+
+        // Caso NÃO encontre → retorna sugestões
+        List<Musica> sugestoes = musicaRepository.findAll();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "nao_encontrado");
+        response.put("mensagem", "Nenhuma música encontrada");
+        response.put("sugestoes", sugestoes);
+
+        return ResponseEntity.ok(response);
+
+    } catch (Exception e) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "erro");
+        errorResponse.put("mensagem", "Erro ao buscar músicas");
+        errorResponse.put("detalhes", e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+}
 }

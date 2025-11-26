@@ -24,6 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
      * Adiciona a permissão de CORS para que o frontend (porta 5500)
      * possa fazer requisições para o backend (porta 8080).
      */
+    
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Permite para todos os endpoints
@@ -33,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
 
                 // Métodos HTTP permitidos
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedHeaders("*");
+               // .allowCredentials(true);
     }
 }
