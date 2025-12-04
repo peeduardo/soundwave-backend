@@ -45,4 +45,4 @@ public class FavoritoController {
         }
         return ResponseEntity.ok(response);
     }
-}
+}   
