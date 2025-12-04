@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MusicaRepository extends JpaRepository<Musica, Integer> {
-     @Query("SELECT m FROM Musica m WHERE m.album.id = :idAlbum")
-     List<Musica> findByAlbumId(@Param("idAlbum") Integer idAlbum);
- }
+    @Query("SELECT m FROM Musica m WHERE m.album.id = :idAlbum")
+    List<Musica> findByAlbumId(@Param("idAlbum") Integer idAlbum);
+
+    @Query("SELECT m FROM Musica m WHERE LOWER(m.nome) LIKE LOWER(CONCAT('%', :termo, '%'))")
+    List<Musica> buscarPorNome(@Param("termo") String termo);
+}

@@ -58,25 +58,25 @@ public class MusicaController {
         return ResponseEntity.ok(musicas);
     }
 
-    @Configuration
-    public class CorsConfig implements WebMvcConfigurer {
+    // @Configuration
+    // public class CorsConfig implements WebMvcConfigurer {
 
-        @Override
-        public void addCorsMappings(CorsRegistry registry) {
-            // Habilita CORS globalmente para todos os endpoints (/**)
-            registry.addMapping("/**")
-                    // Permite o acesso do domínio do seu Live Server
-                    // Você deve incluir a porta (5500) e o protocolo (http)
-                    // Se você usar Live Server, o endereço é geralmente 127.0.0.1 ou localhost
-                    .allowedOrigins("http://127.0.0.1:5500")
-                    // Permite os métodos que usamos (POST, GET, etc)
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                    // Permite o envio de cabeçalhos de autenticação, se houver
-                    .allowCredentials(true)
-                    // Permite todos os cabeçalhos
-                    .allowedHeaders("*");
-        }
-    }
+    //     @Override
+    //     public void addCorsMappings(CorsRegistry registry) {
+    //         // Habilita CORS globalmente para todos os endpoints (/**)
+    //         registry.addMapping("/**")
+    //                 // Permite o acesso do domínio do seu Live Server
+    //                 // Você deve incluir a porta (5500) e o protocolo (http)
+    //                 // Se você usar Live Server, o endereço é geralmente 127.0.0.1 ou localhost
+    //                 .allowedOrigins("http://127.0.0.1:5500")
+    //                 // Permite os métodos que usamos (POST, GET, etc)
+    //                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+    //                 // Permite o envio de cabeçalhos de autenticação, se houver
+    //                 .allowCredentials(true)
+    //                 // Permite todos os cabeçalhos
+    //                 .allowedHeaders("*");
+    //     }
+    // }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> adicionar(@RequestParam("nome") String nome,
@@ -119,4 +119,39 @@ public class MusicaController {
         service.deletarMusica(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Autowired
+private MusicaRepository musicaRepository;
+
+@GetMapping("/buscar")
+public ResponseEntity<?> buscarMusicas(@RequestParam String termo) {
+    try {
+        List<Musica> resultados = musicaRepository.buscarPorNome(termo);
+
+        // Caso encontre resultados
+        if (!resultados.isEmpty()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "ok");
+            response.put("resultados", resultados);
+            return ResponseEntity.ok(response);
+        }
+
+        // Caso NÃO encontre → retorna sugestões
+        List<Musica> sugestoes = musicaRepository.findAll();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "nao_encontrado");
+        response.put("mensagem", "Nenhuma música encontrada");
+        response.put("sugestoes", sugestoes);
+
+        return ResponseEntity.ok(response);
+
+    } catch (Exception e) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "erro");
+        errorResponse.put("mensagem", "Erro ao buscar músicas");
+        errorResponse.put("detalhes", e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+}
 }
