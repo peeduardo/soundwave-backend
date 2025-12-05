@@ -29,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**") // Permite para todos os endpoints
 
                 // Endereço do seu Live Server
-                .allowedOrigins("http://127.0.0.1:5500")
+                .allowedOrigins("http://127.0.0.1:5501")
 
                 // Métodos HTTP permitidos
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
